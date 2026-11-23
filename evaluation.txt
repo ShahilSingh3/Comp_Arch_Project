@@ -1,0 +1,81 @@
+
+The final simulator evaluation will now cover everything up to and
+including RV32I + 5-stage pipeline + hazards/forwarding + branch
+prediction + M extension + F extension with fcsr.
+
+Major updates:
+1) NEW: riscv_sim_base_updated/  -- attached herewith.
+   You need to add your own code in places wherever  TODO is written.
+   
+
+2) A NEW self-check package (student_package.zip) is attached to this post. -- attached herewith.
+⚠️ IF YOU DOWNLOADED THE EARLIER PACKAGE: DELETE IT AND USE THE NEW
+ONE. The old evaluate.py, ref_ui/ and sample files no longer match the final evaluation.
+
+3) Read the README.md file in "student_package" carefully before proceeding.
+ 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT have changed/updated/added?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 UPDATED: Of the 5 hidden test programs for final evaluation, 2 use floating-point (F extension)
+   instructions. The other 3 cover RV32I, the pipeline and the M extension.
+
+🔴 CHANGED: updated reference UI (ref_ui/) in the student package.
+   The register dump displayed using "--batch" now have
+   i) 32 general purpose register, along with general counters
+   ii) 32 FP registers (f0 to f31)
+   iii) the fcsr register with its rounding mode and exception flags, e.g.
+       fcsr =0x00000011  (frm=0  flags: NV NX)
+
+🔴 NEW:  Build  Requirement - the new ref_ui/ uses the FP register file.
+   You must ensure that the following are properly declared in core/cpu_state.h,  and defined in appropriate places
+   i) cpu_read_freg(),
+   ii) cpu_freg_abi_name(),
+   iii) cpu_frm(),
+   iv) a field:  cpu->fcsr  
+   v) Constants: FFLAG_NV,  FFLAG_DZ,  FFLAG_OF, FFLAG_UF,  FFLAG_NX
+
+   NOTE: If these are missing, the evaluator prints  "Cannot build from source" and you get 0 for ALL tests, not just the FP
+   ones. The riscv_sim_base_updated/core/ already contains all of these.
+
+🆕 NEW: "# GRADE:" line in test programs. It decides which registers are checked for evaluation.
+       # GRADE: int      -> x1..x31 + pc are graded (32 values)
+       # GRADE: int+fp   -> x1..x31 + pc + f0..f31 + fcsr (65 values)
+   FP registers are checked ONLY in the floating-point tests. In an FP
+   test, all 65 values (including fcsr) must be right.
+   Run evaluate.py with --verbose to see  which registers mismatch.
+
+🆕 NEW: sample.s / sample.txt now include FP code
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT YOU SHOULD DO NOW?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Download the new student_package.zip and unzip it (replace the old one).
+2. Read README.md.
+3. Make sure you run evaluate.py from the same folder (as it is), e.g.,
+       python3 evaluate.py <your_folder_or_zip> sample.s sample.txt --verbose
+4. Aim for: register state match= 100% ,counter match = 100%
+5. Write may write your own FP test programs, cross-check the output against RARS v1.6 (the one used in lab) or by hand.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT IS THE SUBMISSION DEADLINE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUBMISSION DEADLINE:  25/11/2026  23:59
+SUBMISSION INSTRUCTIONS: Format - a zip file with name as "Final_<STUDENTID1_STUDENTID2>.zip,
+e.g. , Final_2023B3A70280H_2024A7PS0178H.zip
+
+SUBMISSION DEADLINE:  25/11/2026  23:59
+SUBMISSION INSTRUCTIONS: Format - a zip file with name as "Final_<STUDENTID1_STUDENTID2>.zip,
+e.g. , Final_2023B3A70280H_2024A7PS0178H.zip
+
+Important Note: 
+i) If your code similarity as per MOSS is greater than 95%, then your mark will be 0/20 for this lab assignment.  
+ii) Provided your build is correct and your code plagiarism is less than equal to 95% as per MOSS, the minimum marks you can get is 5. 
+
+
+Marking Scheme: 
+The marking is based on two aspects: register accuracy and counter accuracy.
+Register accuracy: Per test case, you will either get 12 marks if all registers correct, or 3 marks (even if 1 register value is wrong). 5 test case marks will be averaged for getting the final marks for register accuracy.
+Counter accuracy: Per test case, your marks will vary from 2 to 8. Here, the marks will be awarded linearly in that range depending on your accuracy, i.e., 0% accuracy -> 2 marks, 100% accuracy -> 8 marks, 50% accuracy -> 2 + (50/100)*(8-2) = 5 marks, and so on. Then, 5 test case marks will be averaged for getting the final marks for counter accuracy.
+Finally, the two marks will be added and then it will be rounded off to the next integer as your mark in this assignment.

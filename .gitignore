@@ -1,0 +1,12 @@
+# Build outputs
+*.o
+*.d
+riscv_sim_base_updated/rvsim
+riscv_sim_base_updated/tests/test_rv32m
+
+# Python
+__pycache__/
+*.pyc
+
+# Submission archives
+*.zip
